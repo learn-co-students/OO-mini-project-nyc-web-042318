@@ -1,5 +1,5 @@
 class User
-  attr_accessor :name,:recipecard, :allergen
+  attr_accessor :name, :allergen
 
   ALL = []
   def initialize(name)
@@ -13,8 +13,8 @@ class User
   end
 
   def add_recipe_card(recipe,date,rating)
-    self.recipecard = RecipeCard.new(recipe,date,rating)
-    self.recipecard.user = self
+    new_card = RecipeCard.new(recipe,date,rating)
+    new_card.user = self
   end
 
   def recipes
@@ -34,9 +34,15 @@ class User
 
   def top_three_recipe
     #look thru the top 3
+
+    result = RecipeCard.all.each do |rcard|
+      rcard.user == self
+    end
+    result.sort_by{|r| r.rating}
   end
 
   def most_recent_recipe
     #user the last addition's to recipe book
+    self.recipes.last
   end
 end
