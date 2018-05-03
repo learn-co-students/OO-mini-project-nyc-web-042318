@@ -1,11 +1,11 @@
 class User
-  attr_accessor :name,:recipecard,:allegen
+  attr_accessor :name,:recipecard, :allergen
 
   ALL = []
-  def initialize(name,allegen)
+  def initialize(name)
     @name = name
-    @allegen = allegen
-    ALL <<self
+    # @allergen = allergen
+    ALL << self
   end
 
   def self.all
@@ -13,12 +13,15 @@ class User
   end
 
   def add_recipe_card(recipe,date,rating)
-    self.recipecard = Recipecard.new(recipe,date,rating)
+    self.recipecard = RecipeCard.new(recipe,date,rating)
     self.recipecard.user = self
   end
 
   def recipes
     #looking the recipecard for recipes
+    RecipeCard.all.map do |rcard|
+      rcard.recipe if rcard.user == self
+    end
   end
 
   def declear_allegen(ingredient)
