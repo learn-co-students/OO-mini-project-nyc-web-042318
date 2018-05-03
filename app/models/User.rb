@@ -18,10 +18,12 @@ class User
   end
 
   def recipes
+    results = []
     #looking the recipecard for recipes
-    RecipeCard.all.map do |rcard|
-      rcard.recipe if rcard.user == self
+    RecipeCard.all.each do |rcard|
+      results << rcard.recipe if rcard.user == self
     end
+    results
   end
 
   def declare_allergen(ingredient)
@@ -29,22 +31,47 @@ class User
   end
 
   def allergens
+    results = []
     #looking thru the allegens for allegen == self
-    Allergen.all.select do |allergen|
-      allergen.user = self
+    Allergen.all.each do |allergen|
+      if allergen.user == self
+        results << allergen.ingredient
+      end
     end
+    results
   end
 
   def top_three_recipe
     #look thru the top 3
 
-    result = RecipeCard.all.each do |rcard|
+    result = RecipeCard.all.select do |rcard|
       rcard.user == self
     end
-    result.sort_by{|r| r.rating}[-3..-1]
-end
+    result.sort_by{|r| r.rating}[-3..-1].map do |rc_inst|
+      rc_inst.recipe
+    end
+  end
+
   def most_recent_recipe
     #user the last addition's to recipe book
     self.recipes.last
   end
+
+  def safe_recipes
+    results = []
+    count = 0
+    self.recipes.each do |recipe|
+        flag = 0
+      self.allergens.each do |allergen|
+        if recipe.ingredients.include?(allergen)
+          flag = 1
+        end
+      end
+        if flag == 0
+        results <<  recipe
+      end
+    end
+    results
+  end
+
 end

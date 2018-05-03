@@ -41,17 +41,27 @@ result
         end
       end
     end
-  result
+  result.uniq
   end
 
   def add_ingredient (ingredient_array)
     ingredient_array.each do |ingredient|
       RecipeIngredient.new(self, ingredient)
     end
-
   end
 
+  def self.most_popular
+    count = {}
 
+    RecipeCard.all.each do |recipe_card|
+      if count.has_key?(recipe_card.recipe)
+        count[recipe_card.recipe] += 1
+      else
+        count[recipe_card.recipe] = 1
+      end
+    end
+     count.max_by {|key, value| value }[0]
+  end
 
 
 
