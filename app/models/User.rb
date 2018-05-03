@@ -24,12 +24,15 @@ class User
     end
   end
 
-  def declear_allegen(ingredient)
-    self.allegen=Allegen.new(ingredient)
+  def declare_allergen(ingredient)
+    Allergen.new(self, ingredient)
   end
 
-  def allegnes
+  def allergens
     #looking thru the allegens for allegen == self
+    Allergen.all.select do |allergen|
+      allergen.user = self
+    end
   end
 
   def top_three_recipe
@@ -38,9 +41,8 @@ class User
     result = RecipeCard.all.each do |rcard|
       rcard.user == self
     end
-    result.sort_by{|r| r.rating}
-  end
-
+    result.sort_by{|r| r.rating}[-3..-1]
+end
   def most_recent_recipe
     #user the last addition's to recipe book
     self.recipes.last

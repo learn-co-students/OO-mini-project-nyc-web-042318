@@ -21,16 +21,34 @@ class Recipe
   end
 
   def ingredients
-    #return all ingredients in the recipe
-
+    result = []
+    RecipeIngredient.all.each do |ingredient|
+      if ingredient.recipe == self
+        result << ingredient.ingredient
+      end
+    end
+result
   end
 
-  def allegens
+  def allergens
+    result = []
     #return all ingredient in the recipe that are allgens
+    Allergen.all.map do |allergen|
+
+      self.ingredients.map do |ingredient|
+        if allergen.ingredient == ingredient
+          result << ingredient
+        end
+      end
+    end
+  result
   end
 
-  def add_ingredient (array_recipe_ingredients)
-    #add to recipes
+  def add_ingredient (ingredient_array)
+    ingredient_array.each do |ingredient|
+      RecipeIngredient.new(self, ingredient)
+    end
+
   end
 
 
