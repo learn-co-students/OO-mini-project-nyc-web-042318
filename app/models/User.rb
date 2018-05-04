@@ -38,6 +38,10 @@ class User
     end
   end
 
+  def allergen_ingredients
+    self.allergens.map {|allergen| allergen.ingredient}
+  end
+
   def recipe_card_third_ratings
     # iterate through our own recipes and make a sorted list of the ratings and find the 3rd highest ratin
     #gs
@@ -58,7 +62,7 @@ class User
     third_highest_rating = sorted_ratings[-3][1]
 
   end
-
+#max_by(3)takes an argument {|recipe_card| recipe_card.rating}
   def top_three_recipes
     recipe_cards = Recipecard.all.select do |recipecards|
       recipecards.user == self

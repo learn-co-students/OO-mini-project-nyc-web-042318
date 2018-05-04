@@ -14,6 +14,13 @@ class Recipe
     ALL
   end
 
+  def recipe_cards
+    RecipeCard.all.select {|recipe_card| recipe_card.recipe == self}
+  end
+  def self.most_popular
+    self.all.max_by {|recipe| recipe.recipe_cards.count}
+  end
+
   def users
     array = []
     Recipecard.all.each do |book|
@@ -34,8 +41,8 @@ class Recipe
   end
 
   def allergens
-    overlap = ingredients & Allergen.all
-    overlap
+    allergen = Allergen.all.map {|allergen| allergen.ingredient}
+    allregen & ingredients
   end
 
   def add_ingredients(ingredients)
